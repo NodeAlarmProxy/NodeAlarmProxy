@@ -1,6 +1,7 @@
 Initial Commit...  Currently App.js will connect to the envisalink server, provide the password, connect and get a status update.  Whenever the security system has changes they will get broadcast to this node app.
 
-==Setup==
+##Setup##
+
 Make a `config.js` file with the following:
 
     exports.password = '';
@@ -10,7 +11,8 @@ Make a `config.js` file with the following:
 
 then run `node app`
 
-==Future==
+##Future##
+
 Eventually "servertest.js" will get the bugs worked out and replace app.js
 
 Then I'll convert everything to a npm package.
