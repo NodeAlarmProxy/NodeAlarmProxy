@@ -256,7 +256,7 @@ exports.tpicommands = {
     'bytes':4,
     'post':'has gone into alarm',
     'send':'',
-    'action':''
+    'action':'updatezone'
   },
   '602' : {
     'name':'Zone Alarm Restore',
@@ -264,7 +264,7 @@ exports.tpicommands = {
     'bytes':4,
     'post':'has been restored',
     'send':'',
-    'action':''
+    'action':'updatezone'
   },
   '603' : {
     'name':'Zone Temper',
@@ -272,7 +272,7 @@ exports.tpicommands = {
     'bytes':4,
     'post':'has been tampered with',
     'send':'',
-    'action':''
+    'action':'updatezone'
   },
   '604' : {
     'name':'Zone Tamper Restore',
@@ -280,7 +280,7 @@ exports.tpicommands = {
     'bytes':4,
     'post':'tamper condition has been restored',
     'send':'',
-    'action':''
+    'action':'updatezone'
   },
   '605' : {
     'name':'Zone Alarm',
@@ -288,7 +288,7 @@ exports.tpicommands = {
     'bytes':3,
     'post':'has a fault condition',
     'send':'',
-    'action':''
+    'action':'updatezone'
   },
   '606' : {
     'name':'Zone Alarm Restore',
@@ -296,7 +296,7 @@ exports.tpicommands = {
     'bytes':3,
     'post':'fault condition has been restored',
     'send':'',
-    'action':''
+    'action':'updatezone'
   },
   '609' : {
     'name':'Zone Open',
@@ -304,7 +304,7 @@ exports.tpicommands = {
     'bytes':3,
     'post':'is open',
     'send':'',
-    'action':''
+    'action':'updatezone'
   },
   '610' : {
     'name':'Zone Alarm Restore',
@@ -312,7 +312,7 @@ exports.tpicommands = {
     'bytes':4,
     'post':'is restored',
     'send':'',
-    'action':''
+    'action':'updatezone'
   },
   '615' : {
     'name':'Envisalink Zone Timer Dump',
@@ -400,7 +400,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'Ready',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '651' : {
     'name':'Partition Not Ready',
@@ -408,7 +408,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is NOT Ready',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '652' : {
     'name':'Partition Armed',
@@ -416,7 +416,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is Armed',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '653' : {
     'name':'Partition Ready - Force Arming Enabled',
@@ -424,7 +424,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is Ready and Force Arming is Enabled',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '654' : {
     'name':'Partition In Alarm',
@@ -432,7 +432,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'IS IN ALARM!',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '655' : {
     'name':'Partition Disarmed',
@@ -440,7 +440,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'has been Disarmed',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '656' : {
     'name':'Exit Delay in Progress',
@@ -448,7 +448,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'in Progress',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '657' : {
     'name':'Entry Delay in Progress',
@@ -456,7 +456,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'in Progress',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '658' : {
     'name':'Keypad Lock-out',
@@ -464,7 +464,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is locked out due to too many failed user code attempts',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '659' : {
     'name':'Partition Failed to Arm',
@@ -472,7 +472,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'FAILED to Arm',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '660' : {
     'name':'PGM Output is in Progress',
@@ -480,7 +480,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is in Progress',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '663' : {
     'name':'Chime Enabled',
@@ -504,7 +504,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '671' : {
     'name':'Function Not Available',
@@ -512,7 +512,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is not Available',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '672' : {
     'name':'Failure to Arm',
@@ -520,7 +520,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'Failed',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '673' : {
     'name':'Partition is Busy',
@@ -528,7 +528,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is Busy',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '674' : {
     'name':'System Arming in Progress',
@@ -536,7 +536,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '680' : {
     'name':'System in Installers Mode',
@@ -552,7 +552,7 @@ exports.tpicommands = {
     'bytes':5,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatepartitionuser'
   },
   '701' : {
     'name':'Special Closing',
@@ -560,7 +560,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'has been armed by Quick Arm, Auto Arm, Keyswitch, DLS or Wireless Key',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '702' : {
     'name':'Partial Closing',
@@ -568,7 +568,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is armed with one or more zones bypassed',
     'send':'',
-    'action':''
+    'action':'updatepartition'
   },
   '750' : {
     'name':'User Opening',
@@ -576,7 +576,7 @@ exports.tpicommands = {
     'bytes':5,
     'post':'',
     'send':'',
-    'action':''
+    'action':'updatepartitionuser'
   },
   '751' : {
     'name':'Special Opening',

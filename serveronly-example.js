@@ -2,7 +2,7 @@ var elink = require('./envisalink.js');
 var config = require('./config.js');
 
 var net = require('net');
-var client = net.connect({port: config.port, host:config.host},
+var client = net.connect({port: config.port, host:'localhost'},
     function() { //'connect' listener
   console.log('client connected');
 });

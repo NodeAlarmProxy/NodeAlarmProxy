@@ -1,0 +1,11 @@
+{
+	"name" : "NodeAlarmProxy",
+	"url" : "https://github.com/oehokie/NodeAlarmProxy",
+	"email" : "m@mattmartz.com",
+	"version" : "0.5.0",
+	"description" : "Use this to communcate to an envisalink 3 module for home alarm monitoring.",
+	"repository" : { 
+		"type" : "git",
+		"url" : "https://github.com/oehokie/NodeAlarmProxy"
+	}
+}
