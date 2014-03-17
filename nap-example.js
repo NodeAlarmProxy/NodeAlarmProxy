@@ -1,4 +1,4 @@
-var nap = require('./servertest.js');
+var nap = require('./nodealarmproxy.js');
 var config = require('./config.js'); //comment this out
 
 var alarm = nap.initConfig({ password:config.password, //replace config.* with appropriate items
@@ -8,7 +8,8 @@ var alarm = nap.initConfig({ password:config.password, //replace config.* with a
 	serverhost:'0.0.0.0',
 	serverport:config.port,
 	zone:7,
-	partition:1
+	partition:1,
+	proxyenable:true
 });
 
 alarm.on('data', function(data) {

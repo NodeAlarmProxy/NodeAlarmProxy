@@ -14,81 +14,86 @@ exports.initConfig = function(initconfig) {
 	if (!config.actualport) {
 		config.actualport = 4025;
 	}
-	if (!config.serverport) {
-		config.serverport = 4025;
-	}
-	if (!config.serverhost) {
-		config.serverhost = '0.0.0.0';
-	}
-	if (!config.serverpassword) {
-		config.serverpassword = config.actualpassword;
+	if (!config.proxyenable) {
+		config.proxyenable = false;
 	}
 
 	actual = net.connect({port: config.actualport, host:config.actualhost}, function() {
 		console.log('actual connected');
 	});
 
-	var server = net.createServer(function(c) { //'connection' listener
-		console.log('server connected');
-		connections.push(c);
-
-		c.on('end', function() {
-			var index = connections.indexOf(c);
-			if ( ~index ) connections.splice(index,1);
-			console.log('server disconnected:',connections);
-		});
-	  
-		c.on('data', function(data) {
-			//console.log(data.toString());
-			var dataslice = data.toString().replace(/[\n\r]/g, ',').split(',')
-
-			for (var i = 0; i<dataslice.length; i++) {
-				var rec = elink.applicationcommands[dataslice[i].substring(0,3)]
-				if (rec) {
-					if (rec.bytes=='' || rec.bytes==0){
-						console.log(rec.pre,rec.post);
-					} else {
-						console.log(rec.pre,dataslice[i].substring(3,dataslice[i].length-2),rec.post);
-					}
-					if (rec.action == 'checkpassword') {
-						checkpassword(c,dataslice[i]);
-					}
-					console.log(rec.action);
-					if (rec.action == 'forward') {
-						sendforward(dataslice[i].substring(0,dataslice[i].length-2))
-					}
-					sendcommand(c,rec.send)
-				}
-			}
-		})
-
-	  c.write('505300');
-	  c.pipe(c);
-	});
-	server.listen(config.serverport,config.serverhost, function() { //'listening' listener
-		console.log('server bound');
-	});
-
-	function checkpassword(c,data) {
-		if (data.substring(3,data.length-2) == config.serverpassword) {
-			console.log('Correct Password! :)')
-			sendcommand(c,'5051');
-		} else {
-			console.log('Incorrect Password :(');
-			sendcommand(c,'5050');
-			c.end();
+	if (config.proxyenable) {
+		if (!config.serverport) {
+			config.serverport = 4025;
 		}
-	}
+		if (!config.serverhost) {
+			config.serverhost = '0.0.0.0';
+		}
+		if (!config.serverpassword) {
+			config.serverpassword = config.actualpassword;
+		}
+		var server = net.createServer(function(c) { //'connection' listener
+			console.log('server connected');
+			connections.push(c);
 
-	function sendforward(data) {
-		console.log('sendforward:',data)
-		sendcommand(actual,data)
-	}
+			c.on('end', function() {
+				var index = connections.indexOf(c);
+				if ( ~index ) connections.splice(index,1);
+				console.log('server disconnected:',connections);
+			});
+		  
+			c.on('data', function(data) {
+				//console.log(data.toString());
+				var dataslice = data.toString().replace(/[\n\r]/g, ',').split(',')
 
-	function broadcastresponse(response) {
-		if (connections.length > 0) {
-			for (var i = 0; i<connections.length; i++) {
-				sendcommand(connections[i],response)
+				for (var i = 0; i<dataslice.length; i++) {
+					var rec = elink.applicationcommands[dataslice[i].substring(0,3)]
+					if (rec) {
+						if (rec.bytes=='' || rec.bytes==0){
+							console.log(rec.pre,rec.post);
+						} else {
+							console.log(rec.pre,dataslice[i].substring(3,dataslice[i].length-2),rec.post);
+						}
+						if (rec.action == 'checkpassword') {
+							checkpassword(c,dataslice[i]);
+						}
+						console.log(rec.action);
+						if (rec.action == 'forward') {
+							sendforward(dataslice[i].substring(0,dataslice[i].length-2))
+						}
+						sendcommand(c,rec.send)
+					}
+				}
+			})
+
+		  c.write('505300');
+		  c.pipe(c);
+		});
+		server.listen(config.serverport,config.serverhost, function() { //'listening' listener
+			console.log('server bound');
+		});
+
+		function checkpassword(c,data) {
+			if (data.substring(3,data.length-2) == config.serverpassword) {
+				console.log('Correct Password! :)')
+				sendcommand(c,'5051');
+			} else {
+				console.log('Incorrect Password :(');
+				sendcommand(c,'5050');
+				c.end();
+			}
+		}
+
+		function sendforward(data) {
+			console.log('sendforward:',data)
+			sendcommand(actual,data)
+		}
+
+		function broadcastresponse(response) {
+			if (connections.length > 0) {
+				for (var i = 0; i<connections.length; i++) {
+					sendcommand(connections[i],response)
+				}
 			}
 		}
 	}
@@ -154,7 +159,9 @@ exports.initConfig = function(initconfig) {
 							loginresponse(datapacket);
 						}
 					}
-					broadcastresponse(datapacket.substring(0,datapacket.length-2));
+					if (config.enableproxy) {
+						broadcastresponse(datapacket.substring(0,datapacket.length-2));
+					}
 				}
 			}
 		}

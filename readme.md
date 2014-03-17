@@ -1,13 +1,25 @@
 ##Setup##
 
-`npm install nodealarmproxy
+`npm install nodealarmproxy`
 
 the `nap-example.js` shows a setup configuration.  Replace the init parameters with your own.
 
 Available commands:
 
-`initConfig(Object)` will create the server and a proxy for other things to connect to (Envisalink only allows one connection... this allows for multiple connections via proxy).
+`initConfig(Object)` will create the server and a proxy for other things to connect to (Envisalink only allows one connection... this allows for multiple connections via proxy).  The object needs to be of the form:
+    { password:'password', //required
+        serverpassword:'serverpassword', //optional, will re-use password if not provided
+        actualhost:config.host, //required
+        actualport:config.port, //optional, will use default port if not provided
+        serverhost:'0.0.0.0', //optional, will use '0.0.0.0' if not provided
+        serverport:config.port, //optional, will use default port if not provided
+        zone:7, //required, this is the number of sensors you have
+        partition:1, //required, this is the number of partitions... usually 1
+        proxyenable:true //enable the proxy or not
+    }
 
 `getCurrent()` will tell the nodealarmproxy to transmit the last known values.
 
-`manualCommand()` will send a command to the Envisalink 3 (do not include the checksum)
+`manualCommand(command)` will send a command to the Envisalink 3 (do not include the checksum).  Command will be a string based on the envisalink 3 third party interface.
+
+Note:  If you don't want to run the proxy, set `proxyenable:false` or omit it entirely
