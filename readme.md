@@ -7,6 +7,7 @@ the `nap-example.js` shows a setup configuration.  Replace the init parameters w
 Available commands:
 
 `initConfig(Object)` will create the server and a proxy for other things to connect to (Envisalink only allows one connection... this allows for multiple connections via proxy).  The object needs to be of the form:
+
     { password:'password', //required
         serverpassword:'serverpassword', //optional, will re-use password if not provided
         actualhost:config.host, //required
