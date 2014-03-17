@@ -1,20 +1,15 @@
-Update: Learning how to make a npm package...
-
 Initial Commit...  Currently App.js will connect to the envisalink server, provide the password, connect and get a status update.  Whenever the security system has changes they will get broadcast to this node app.
 
 ##Setup##
 
-Make a `config.js` file with the following:
+`npm install nodealarmproxy
 
-    exports.password = '';
-    exports.serverpassword='';
-    exports.host = 'x.x.x.x';
-    exports.port = 4025;
+the `nap-example.js` shows a setup configuration.  Replace the init parameters with your own.
 
-then run `node app`
+Available commands:
 
-##Future##
+`initConfig(Object)` will create the server and a proxy for other things to connect to (Envisalink only allows one connection... this allows for multiple connections via proxy).
 
-Eventually "servertest.js" will get the bugs worked out and replace app.js
+`getCurrent()` will tell the nodealarmproxy to transmit the last known values.
 
-Then I'll convert everything to a npm package.
+`manualCommand()` will send a command to the Envisalink 3 (do not include the checksum)

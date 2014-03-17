@@ -14,6 +14,3 @@ var alarm = nap.initConfig({ password:config.password, //replace config.* with a
 alarm.on('data', function(data) {
 	console.log('npmtest data:',data)
 })
-
-exports.alarm=alarm;
-exports.nap = nap;
