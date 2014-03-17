@@ -1,5 +1,3 @@
-Initial Commit...  Currently App.js will connect to the envisalink server, provide the password, connect and get a status update.  Whenever the security system has changes they will get broadcast to this node app.
-
 ##Setup##
 
 `npm install nodealarmproxy
