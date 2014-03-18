@@ -4,7 +4,11 @@ var events = require('events');
 var eventEmitter = new events.EventEmitter();
 //var config = require('./config.js');
 var connections = [];
-var alarmdata = {};
+var alarmdata = {
+	zone:{},
+	partition:{},
+	user:{}
+};
 
 var actual, server, config;
 
@@ -117,19 +121,25 @@ exports.initConfig = function(initconfig) {
 
 	function updatezone(tpi,data) {
 		if (parseInt(data.substring(3,6)) <= config.zone) {
-			alarmdata['zone'+data.substring(3,6)] = tpi.name;
+			alarmdata.zone[parseInt(data.substring(3,6))] = {'send':tpi.send,'name':tpi.name,'code':data};
 			eventEmitter.emit('data',alarmdata);
 		}
 	}
 	function updatepartition(tpi,data) {
 		if (parseInt(data.substring(3,4)) <= config.partition) {
-			alarmdata['partition'+data.substring(3,4)] = tpi.name;
+			alarmdata.partition[parseInt(data.substring(3,4))] = {'send':tpi.send,'name':tpi.name,'code':data};
 			eventEmitter.emit('data',alarmdata);
 		}
 	}
 	function updatepartitionuser(tpi,data) {
 		if (parseInt(data.substring(3,4)) <= config.partition) {
-			alarmdata['user'+data.substring(4,8)] = tpi.name+' '+data.substring(3,4);
+			alarmdata.user[parseInt(data.substring(4,8))] = {'send':tpi.send,'name':tpi.name,'code':data};
+			eventEmitter.emit('data',alarmdata);
+		}
+	}
+	function updatesystem(tpi,data) {
+		if (parseInt(data.substring(3,4)) <= config.partition) {
+			alarmdata['system'] = {'send':tpi.send,'name':tpi.name,'code':data};
 			eventEmitter.emit('data',alarmdata);
 		}
 	}
@@ -153,6 +163,9 @@ exports.initConfig = function(initconfig) {
 							updatepartition(tpi,datapacket)
 						}
 						if (tpi.action == 'updatepartitionuser') {
+							updatepartitionuser(tpi,datapacket)
+						}
+						if (tpi.action == 'updatesystem') {
 							updatepartitionuser(tpi,datapacket)
 						}
 						if (tpi.action == 'loginresponse') {

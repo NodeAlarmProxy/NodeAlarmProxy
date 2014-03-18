@@ -255,7 +255,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':4,
     'post':'has gone into alarm',
-    'send':'',
+    'send':'alarm',
     'action':'updatezone'
   },
   '602' : {
@@ -263,15 +263,15 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':4,
     'post':'has been restored',
-    'send':'',
+    'send':'restore',
     'action':'updatezone'
   },
   '603' : {
-    'name':'Zone Temper',
+    'name':'Zone Tamper',
     'pre':'Zone',
     'bytes':4,
     'post':'has been tampered with',
-    'send':'',
+    'send':'tamper',
     'action':'updatezone'
   },
   '604' : {
@@ -279,7 +279,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':4,
     'post':'tamper condition has been restored',
-    'send':'',
+    'send':'restore',
     'action':'updatezone'
   },
   '605' : {
@@ -287,7 +287,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':3,
     'post':'has a fault condition',
-    'send':'',
+    'send':'alarm',
     'action':'updatezone'
   },
   '606' : {
@@ -295,7 +295,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':3,
     'post':'fault condition has been restored',
-    'send':'',
+    'send':'restore',
     'action':'updatezone'
   },
   '609' : {
@@ -303,7 +303,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':3,
     'post':'is open',
-    'send':'',
+    'send':'open',
     'action':'updatezone'
   },
   '610' : {
@@ -311,7 +311,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':4,
     'post':'is restored',
-    'send':'',
+    'send':'restore',
     'action':'updatezone'
   },
   '615' : {
@@ -327,79 +327,79 @@ exports.tpicommands = {
     'pre':'Duress Alarm Received:',
     'bytes':4,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'duress',
+    'action':'updatesystem'
   },
   '621' : {
     'name':'Fire Key Alarm',
     'pre':'Fire key alarm has been activated',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'alarm',
+    'action':'updatesystem'
   },
   '622' : {
     'name':'Fire Key Restore',
     'pre':'Fire key alarm has been restored',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'restore',
+    'action':'updatesystem'
   },
   '623' : {
     'name':'Auxiliary Key Alarm',
     'pre':'Auxiliary key alarm has been activated',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'alarm',
+    'action':'updatesystem'
   },
   '624' : {
     'name':'Auxiliary Key Restore',
     'pre':'Auxiliary key alarm has been restored',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'restore',
+    'action':'updatesystem'
   },
   '625' : {
     'name':'Panic Key Alarm',
     'pre':'Panic key alarm has been activated',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'alarm',
+    'action':'updatesystem'
   },
   '626' : {
     'name':'Panic Key Restore',
     'pre':'Panic key alarm has been restored',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'restore',
+    'action':'updatesystem'
   },
   '631' : {
     'name':'2-Wire Smoke/Aux Alarm',
     'pre':'2-Wire Smoke/Aux alarm has been activated',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'alarm',
+    'action':'updatesystem'
   },
   '632' : {
     'name':'2-Wire Smoke/Aux Restore',
     'pre':'2-Wire Smoke/Aux alarm has been restore',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'alarm',
+    'action':'updatesystem'
   },
   '650' : {
     'name':'Partition Ready',
     'pre':'Partition',
     'bytes':1,
     'post':'Ready',
-    'send':'',
+    'send':'ready',
     'action':'updatepartition'
   },
   '651' : {
@@ -407,7 +407,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'is NOT Ready',
-    'send':'',
+    'send':'notready',
     'action':'updatepartition'
   },
   '652' : {
@@ -415,7 +415,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'is Armed',
-    'send':'',
+    'send':'armed',
     'action':'updatepartition'
   },
   '653' : {
@@ -423,7 +423,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'is Ready and Force Arming is Enabled',
-    'send':'',
+    'send':'readyforce',
     'action':'updatepartition'
   },
   '654' : {
@@ -431,7 +431,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'IS IN ALARM!',
-    'send':'',
+    'send':'alarm',
     'action':'updatepartition'
   },
   '655' : {
@@ -439,7 +439,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'has been Disarmed',
-    'send':'',
+    'send':'disarmed',
     'action':'updatepartition'
   },
   '656' : {
@@ -447,7 +447,7 @@ exports.tpicommands = {
     'pre':'Exit Delay of Partition',
     'bytes':1,
     'post':'in Progress',
-    'send':'',
+    'send':'exitdelay',
     'action':'updatepartition'
   },
   '657' : {
@@ -455,7 +455,7 @@ exports.tpicommands = {
     'pre':'Entry Delay of Partition',
     'bytes':1,
     'post':'in Progress',
-    'send':'',
+    'send':'entrydelay',
     'action':'updatepartition'
   },
   '658' : {
@@ -463,7 +463,7 @@ exports.tpicommands = {
     'pre':'Keypad at Partition',
     'bytes':1,
     'post':'is locked out due to too many failed user code attempts',
-    'send':'',
+    'send':'keypadlock',
     'action':'updatepartition'
   },
   '659' : {
@@ -471,7 +471,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'FAILED to Arm',
-    'send':'',
+    'send':'failedarm',
     'action':'updatepartition'
   },
   '660' : {
@@ -480,7 +480,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is in Progress',
     'send':'',
-    'action':'updatepartition'
+    'action':''
   },
   '663' : {
     'name':'Chime Enabled',
@@ -503,7 +503,7 @@ exports.tpicommands = {
     'pre':'Invalid Access Code on Partition',
     'bytes':1,
     'post':'',
-    'send':'',
+    'send':'invalidcode',
     'action':'updatepartition'
   },
   '671' : {
@@ -512,14 +512,14 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is not Available',
     'send':'',
-    'action':'updatepartition'
+    'action':''
   },
   '672' : {
     'name':'Failure to Arm',
     'pre':'An Attempt to Arm Partition',
     'bytes':1,
     'post':'Failed',
-    'send':'',
+    'send':'failedarm',
     'action':'updatepartition'
   },
   '673' : {
@@ -527,7 +527,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'is Busy',
-    'send':'',
+    'send':'busy',
     'action':'updatepartition'
   },
   '674' : {
@@ -535,7 +535,7 @@ exports.tpicommands = {
     'pre':'System is auto-arming and in arm warning delay on Partition',
     'bytes':1,
     'post':'',
-    'send':'',
+    'send':'arming',
     'action':'updatepartition'
   },
   '680' : {
@@ -551,7 +551,7 @@ exports.tpicommands = {
     'pre':'Partition has been armed by user:',
     'bytes':5,
     'post':'',
-    'send':'',
+    'send':'armed',
     'action':'updatepartitionuser'
   },
   '701' : {
@@ -559,7 +559,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'has been armed by Quick Arm, Auto Arm, Keyswitch, DLS or Wireless Key',
-    'send':'',
+    'send':'armed',
     'action':'updatepartition'
   },
   '702' : {
@@ -567,7 +567,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'is armed with one or more zones bypassed',
-    'send':'',
+    'send':'armedbypass',
     'action':'updatepartition'
   },
   '750' : {
@@ -575,7 +575,7 @@ exports.tpicommands = {
     'pre':'Partition Opened by User:',
     'bytes':5,
     'post':'',
-    'send':'',
+    'send':'useropen',
     'action':'updatepartitionuser'
   },
   '751' : {
@@ -583,8 +583,8 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'has been disarmed by Keyswitch, DLS or Wireless Key',
-    'send':'',
-    'action':''
+    'send':'disarmed',
+    'action':'updatepartition'
   },
   '800' : {
     'name':'Panel Battery Trouble',
@@ -655,16 +655,16 @@ exports.tpicommands = {
     'pre':'A tamper has occured with a module',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'tamper',
+    'action':'updatesystem'
   },
   '830' : {
     'name':'General System Tamper Restore',
     'pre':'General System Tamper Restored',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'tamperrestore',
+    'action':'updatesystem'
   },
   '840' : {
     'name':'Trouble LED On',
