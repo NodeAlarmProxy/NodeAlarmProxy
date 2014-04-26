@@ -103,17 +103,15 @@ exports.initConfig = function(initconfig) {
 	}
 
 	function loginresponse(data) {
-		if (data.substring(3,4) == '0') {
+		var loginStatus = data.substring(3, 4);
+		if (loginStatus == '0') {
 			console.log('Incorrect Password :(');
-		}
-		if (data.substring(3,4) == '1') {
+		} else if (loginStatus == '1') {
 			console.log('successfully logged in!  getting current data...');
 			sendcommand(actual,'001');
-		}
-		if (data.substring(3,4) == '2') {
+		} else if (loginStatus == '2') {
 			console.log('Request for Password Timed Out :(');
-		}
-		if (data.substring(3,4) == '3') {
+		} else if (loginStatus == '3') {
 			console.log('login requested... sending response...');
 			sendcommand(actual,'005'+config.password);
 		}
