@@ -9,9 +9,26 @@ var alarm = nap.initConfig({ password:config.password, //replace config.* with a
 	serverport:config.port,
 	zone:7,
 	partition:1,
-	proxyenable:true
+	proxyenable:true,
+	atomicEvents:false
 });
 
 alarm.on('data', function(data) {
-	console.log('npmtest data:',data)
-})
+	console.log('npmtest data:',data);
+});
+
+alarm.on('zoneupdate', function(data) {
+	console.log('npmtest zoneupdate:',data);
+});
+
+alarm.on('partitionupdate', function(data) {
+	console.log('npmtest partitionupdate:',data);
+});
+
+alarm.on('partitionuserupdate', function(data) {
+	console.log('npmtest partitionuserupdate:',data);
+});
+
+alarm.on('systemupdate', function(data) {
+	console.log('npmtest systemupdate:',data);
+});

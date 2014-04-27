@@ -16,7 +16,8 @@ Available commands:
         serverport:config.port, //optional, will use default port if not provided
         zone:7, //required, this is the number of sensors you have
         partition:1, //required, this is the number of partitions... usually 1
-        proxyenable:true //enable the proxy or not
+        proxyenable:true, //enable the proxy or not
+        atomicEvents:false //optional, will default to false. If true, specific zone/partition/user events will be broadcast.
     }
 
 `getCurrent()` will tell the nodealarmproxy to transmit the last known values.
