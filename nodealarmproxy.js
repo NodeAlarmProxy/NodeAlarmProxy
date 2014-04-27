@@ -170,7 +170,7 @@ exports.initConfig = function(initconfig) {
 							loginresponse(datapacket);
 						}
 					}
-					if (config.enableproxy) {
+					if (config.proxyenable) {
 						broadcastresponse(datapacket.substring(0,datapacket.length-2));
 					}
 				}
