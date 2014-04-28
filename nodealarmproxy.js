@@ -118,27 +118,52 @@ exports.initConfig = function(initconfig) {
 	}
 
 	function updatezone(tpi,data) {
-		if (parseInt(data.substring(3,6)) <= config.zone) {
-			alarmdata.zone[parseInt(data.substring(3,6))] = {'send':tpi.send,'name':tpi.name,'code':data};
-			eventEmitter.emit('data',alarmdata);
+		var zone = parseInt(data.substring(3,6));
+		var initialUpdate = alarmdata.zone[zone] === undefined;
+		if (zone <= config.zone) {
+			alarmdata.zone[zone] = {'send':tpi.send,'name':tpi.name,'code':data};
+			if (config.atomicEvents && !initialUpdate) {
+				eventEmitter.emit('zoneupdate', [zone, alarmdata.zone[zone]]);
+			} else {
+				eventEmitter.emit('data',alarmdata);
+			}
 		}
 	}
 	function updatepartition(tpi,data) {
-		if (parseInt(data.substring(3,4)) <= config.partition) {
-			alarmdata.partition[parseInt(data.substring(3,4))] = {'send':tpi.send,'name':tpi.name,'code':data};
-			eventEmitter.emit('data',alarmdata);
+		var partition = parseInt(data.substring(3,4));
+		var initialUpdate = alarmdata.partition[partition] === undefined;
+		if (partition <= config.partition) {
+			alarmdata.partition[partition] = {'send':tpi.send,'name':tpi.name,'code':data};
+			if (config.atomicEvents && !initialUpdate) {
+				eventEmitter.emit('partitionupdate', [partition, alarmdata.partition[partition]]);
+			} else {
+				eventEmitter.emit('data',alarmdata);
+			}
 		}
 	}
 	function updatepartitionuser(tpi,data) {
-		if (parseInt(data.substring(3,4)) <= config.partition) {
-			alarmdata.user[parseInt(data.substring(4,8))] = {'send':tpi.send,'name':tpi.name,'code':data};
-			eventEmitter.emit('data',alarmdata);
+		var partition = parseInt(data.substring(3,4));
+		var user = parseInt(data.substring(4,8));
+		var initialUpdate = alarmdata.user[user] === undefined;
+		if (partition <= config.partition) {
+			alarmdata.user[user] = {'send':tpi.send,'name':tpi.name,'code':data};
+			if (config.atomicEvents && !initialUpdate) {
+				eventEmitter.emit('partitionuserupdate', [user, alarmdata.user[user]]);
+			} else {
+				eventEmitter.emit('data',alarmdata);
+			}
 		}
 	}
 	function updatesystem(tpi,data) {
-		if (parseInt(data.substring(3,4)) <= config.partition) {
+		var partition = parseInt(data.substring(3,4));
+		var initialUpdate = alarmdata.system === undefined;
+		if (partition <= config.partition) {
 			alarmdata.system = {'send':tpi.send,'name':tpi.name,'code':data};
-			eventEmitter.emit('data',alarmdata);
+			if (config.atomicEvents && !initialUpdate) {
+				eventEmitter.emit('systemupdate', alarmdata.system);
+			} else {
+				eventEmitter.emit('data',alarmdata);
+			}
 		}
 	}
 
