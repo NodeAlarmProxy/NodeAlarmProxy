@@ -25,3 +25,12 @@ Available commands:
 `manualCommand(command)` will send a command to the Envisalink 3 (do not include the checksum).  Command will be a string based on the envisalink 3 third party interface.
 
 Note:  If you don't want to run the proxy, set `proxyenable:false` or omit it entirely
+
+Note:  My config file has:
+    exports.password = '';  //Envisalink password
+    exports.serverpassword=''; //Password you want for proxy server
+    exports.host = '';  //host IP Address
+    //exports.host = 'localhost';
+    exports.port = 4025;
+    exports.app_id = ""; //smartthings app_id
+    exports.access_token = ""; //smartthings access_token

@@ -123,7 +123,8 @@ exports.initConfig = function(initconfig) {
 		if (zone <= config.zone) {
 			alarmdata.zone[zone] = {'send':tpi.send,'name':tpi.name,'code':data};
 			if (config.atomicEvents && !initialUpdate) {
-				eventEmitter.emit('zoneupdate', [zone, alarmdata.zone[zone]]);
+				//eventEmitter.emit('zoneupdate', [zone, alarmdata.zone[zone]]);
+				eventEmitter.emit('zoneupdate',{zone:parseInt(data.substring(3,6)),code:data.substring(0,3)});
 			} else {
 				eventEmitter.emit('data',alarmdata);
 			}
@@ -135,7 +136,12 @@ exports.initConfig = function(initconfig) {
 		if (partition <= config.partition) {
 			alarmdata.partition[partition] = {'send':tpi.send,'name':tpi.name,'code':data};
 			if (config.atomicEvents && !initialUpdate) {
-				eventEmitter.emit('partitionupdate', [partition, alarmdata.partition[partition]]);
+				//eventEmitter.emit('partitionupdate', [partition, alarmdata.partition[partition]]);
+				if (data.substring(0,3) == "652") {
+						eventEmitter.emit('partitionupdate',{partition:parseInt(data.substring(3,4)),code:data.substring(0,3),mode:data.substring(4,5)});
+				} else {
+					eventEmitter.emit('partitionupdate',{partition:parseInt(data.substring(3,4)),code:data.substring(0,3)});
+				}
 			} else {
 				eventEmitter.emit('data',alarmdata);
 			}
