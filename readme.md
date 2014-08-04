@@ -27,6 +27,7 @@ Available commands:
 Note:  If you don't want to run the proxy, set `proxyenable:false` or omit it entirely
 
 Note:  My config file has:
+
     exports.password = '';  //Envisalink password
     exports.serverpassword=''; //Password you want for proxy server
     exports.host = '';  //host IP Address
@@ -34,3 +35,5 @@ Note:  My config file has:
     exports.port = 4025;
     exports.app_id = ""; //smartthings app_id
     exports.access_token = ""; //smartthings access_token
+
+Changes were mostly done to the `nap-example.js`, however if you're adding SmartThings integration... you'll need to setup your own app by following instructions similar to this (I've contributed to this project as well)... [smartthings-dsc-alarm](https://github.com/kholloway/smartthings-dsc-alarm)
