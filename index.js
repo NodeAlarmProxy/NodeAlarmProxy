@@ -40,20 +40,25 @@ exports.initConfig = function(initconfig) {
 			console.log('server connected');
 			connections.push(c);
 
+			c.on('error',function(e){
+				console.log('error',e);
+				connections = [];
+			});
+
 			c.on('end', function() {
 				var index = connections.indexOf(c);
 				if ( ~index ) connections.splice(index,1);
 				console.log('server disconnected:',connections);
 			});
-
+		  
 			c.on('data', function(data) {
-				//console.log(data.toString());
+				console.log('data',data.toString());
 				var dataslice = data.toString().replace(/[\n\r]/g, ',').split(',');
 
-				for (var i = 0; i < dataslice.length; i++) {
+				for (var i = 0; i<dataslice.length; i++) {
 					var rec = elink.applicationcommands[dataslice[i].substring(0,3)];
 					if (rec) {
-						if (rec.bytes === '' || rec.bytes === 0) {
+						if (rec.bytes=='' || rec.bytes==0){
 							console.log(rec.pre,rec.post);
 						} else {
 							console.log(rec.pre,dataslice[i].substring(3,dataslice[i].length-2),rec.post);
@@ -61,7 +66,7 @@ exports.initConfig = function(initconfig) {
 						if (rec.action == 'checkpassword') {
 							checkpassword(c,dataslice[i]);
 						}
-						console.log(rec.action);
+						console.log('rec.action',rec.action);
 						if (rec.action == 'forward') {
 							sendforward(dataslice[i].substring(0,dataslice[i].length-2));
 						}
@@ -70,14 +75,14 @@ exports.initConfig = function(initconfig) {
 				}
 			});
 
-			c.write('505300');
-			c.pipe(c);
+		  c.write('505300');
+		  c.pipe(c);
 		});
 		server.listen(config.serverport,config.serverhost, function() { //'listening' listener
 			console.log('server bound');
 		});
 
-		var checkpassword = function (c,data) {
+		function checkpassword(c,data) {
 			if (data.substring(3,data.length-2) == config.serverpassword) {
 				console.log('Correct Password! :)');
 				sendcommand(c,'5051');
@@ -86,118 +91,96 @@ exports.initConfig = function(initconfig) {
 				sendcommand(c,'5050');
 				c.end();
 			}
-		};
+		}
 
-		var sendforward = function (data) {
+		function sendforward(data) {
 			console.log('sendforward:',data);
 			sendcommand(actual,data);
-		};
+		}
 
-		var broadcastresponse = function (response) {
+		function broadcastresponse(response) {
 			if (connections.length > 0) {
 				for (var i = 0; i<connections.length; i++) {
+					console.log('response',response);
 					sendcommand(connections[i],response);
 				}
 			}
-		};
+		}
 	}
 
 	function loginresponse(data) {
-		var loginStatus = data.substring(3, 4);
-		if (loginStatus == '0') {
+		if (data.substring(3,4) == '0') {
 			console.log('Incorrect Password :(');
-		} else if (loginStatus == '1') {
+		}
+		if (data.substring(3,4) == '1') {
 			console.log('successfully logged in!  getting current data...');
 			sendcommand(actual,'001');
-		} else if (loginStatus == '2') {
+		}
+		if (data.substring(3,4) == '2') {
 			console.log('Request for Password Timed Out :(');
-		} else if (loginStatus == '3') {
+		}
+		if (data.substring(3,4) == '3') {
 			console.log('login requested... sending response...');
 			sendcommand(actual,'005'+config.password);
 		}
 	}
 
 	function updatezone(tpi,data) {
-		var zone = parseInt(data.substring(3,6));
-		var initialUpdate = alarmdata.zone[zone] === undefined;
-		if (zone <= config.zone) {
-			alarmdata.zone[zone] = {'send':tpi.send,'name':tpi.name,'code':data};
-			if (config.atomicEvents && !initialUpdate) {
-				//eventEmitter.emit('zoneupdate', [zone, alarmdata.zone[zone]]);
-				eventEmitter.emit('zoneupdate',{zone:parseInt(data.substring(3,6)),code:data.substring(0,3)});
-			} else {
-				eventEmitter.emit('data',alarmdata);
-			}
+		if (parseInt(data.substring(3,6)) <= config.zone) {
+			alarmdata.zone[parseInt(data.substring(3,6))] = {'send':tpi.send,'name':tpi.name,'code':data};
+			eventEmitter.emit('zone',{zone:parseInt(data.substring(3,6)),code:data.substring(0,3)});
+			//eventEmitter.emit('data',{alarmdata:alarmdata,zone:parseInt(data.substring(3,6)),code:data.substring(0,3)});
 		}
 	}
 	function updatepartition(tpi,data) {
-		var partition = parseInt(data.substring(3,4));
-		var initialUpdate = alarmdata.partition[partition] === undefined;
-		if (partition <= config.partition) {
-			alarmdata.partition[partition] = {'send':tpi.send,'name':tpi.name,'code':data};
-			if (config.atomicEvents && !initialUpdate) {
-				//eventEmitter.emit('partitionupdate', [partition, alarmdata.partition[partition]]);
-				if (data.substring(0,3) == "652") {
-						eventEmitter.emit('partitionupdate',{partition:parseInt(data.substring(3,4)),code:data.substring(0,3),mode:data.substring(4,5)});
-				} else {
-					eventEmitter.emit('partitionupdate',{partition:parseInt(data.substring(3,4)),code:data.substring(0,3)});
-				}
+		if (parseInt(data.substring(3,4)) <= config.partition) {
+			alarmdata.partition[parseInt(data.substring(3,4))] = {'send':tpi.send,'name':tpi.name,'code':data};
+			if (data.substring(0,3) == "652") {
+				eventEmitter.emit('partition',{partition:parseInt(data.substring(3,4)),code:data.substring(0,3),mode:data.substring(4,5)});
 			} else {
-				eventEmitter.emit('data',alarmdata);
+				eventEmitter.emit('partition',{partition:parseInt(data.substring(3,4)),code:data.substring(0,3)});
 			}
+			//eventEmitter.emit('data',{alarmdata:alarmdata,partition:parseInt(data.substring(3,4)),code:data.substring(0,3)});
 		}
 	}
 	function updatepartitionuser(tpi,data) {
-		var partition = parseInt(data.substring(3,4));
-		var user = parseInt(data.substring(4,8));
-		var initialUpdate = alarmdata.user[user] === undefined;
-		if (partition <= config.partition) {
-			alarmdata.user[user] = {'send':tpi.send,'name':tpi.name,'code':data};
-			if (config.atomicEvents && !initialUpdate) {
-				eventEmitter.emit('partitionuserupdate', [user, alarmdata.user[user]]);
-			} else {
-				eventEmitter.emit('data',alarmdata);
-			}
+		if (parseInt(data.substring(3,4)) <= config.partition) {
+			alarmdata.user[parseInt(data.substring(4,8))] = {'send':tpi.send,'name':tpi.name,'code':data};
+			eventEmitter.emit('data',{alarmdata:alarmdata});
 		}
 	}
 	function updatesystem(tpi,data) {
-		var partition = parseInt(data.substring(3,4));
-		var initialUpdate = alarmdata.system === undefined;
-		if (partition <= config.partition) {
-			alarmdata.system = {'send':tpi.send,'name':tpi.name,'code':data};
-			if (config.atomicEvents && !initialUpdate) {
-				eventEmitter.emit('systemupdate', alarmdata.system);
-			} else {
-				eventEmitter.emit('data',alarmdata);
-			}
+		if (parseInt(data.substring(3,4)) <= config.partition) {
+			alarmdata['system'] = {'send':tpi.send,'name':tpi.name,'code':data};
+			eventEmitter.emit('data',{alarmdata:alarmdata});
 		}
 	}
 
 	actual.on('data', function(data) {
 		var dataslice = data.toString().replace(/[\n\r]/g, ',').split(',');
-
+		  
 		for (var i = 0; i<dataslice.length; i++) {
 			var datapacket = dataslice[i];
-			if (datapacket !== '') {
+			if (datapacket != '') {
 				var tpi = elink.tpicommands[datapacket.substring(0,3)];
 				if (tpi) {
-					if (tpi.bytes === '' || tpi.bytes === 0) {
+					if (tpi.bytes=='' || tpi.bytes==0){
 						console.log(tpi.pre,tpi.post);
 					} else {
 						console.log(tpi.pre,datapacket.substring(3,datapacket.length-2),tpi.post);
-						if (tpi.action === 'updatezone') {
+						if (tpi.action == 'updatezone') {
 							updatezone(tpi,datapacket);
 						}
-						else if (tpi.action === 'updatepartition') {
+						if (tpi.action == 'updatepartition') {
 							updatepartition(tpi,datapacket);
 						}
-						else if (tpi.action === 'updatepartitionuser') {
+						if (tpi.action == 'updatepartitionuser') {
 							updatepartitionuser(tpi,datapacket);
 						}
-						else if (tpi.action === 'updatesystem') {
+						if (tpi.action == 'updatesystem') {
 							updatepartitionuser(tpi,datapacket);
 						}
-						else if (tpi.action === 'loginresponse') {
+						if (tpi.action == 'loginresponse') {
 							loginresponse(datapacket);
 						}
 					}
@@ -207,32 +190,44 @@ exports.initConfig = function(initconfig) {
 				}
 			}
 		}
-		//actual.end();
+	  //actual.end();
 	});
 	actual.on('end', function() {
-		console.log('actual disconnected');
+	  console.log('actual disconnected');
 	});
 
 	return eventEmitter;
 };
 
-function sendcommand(addressee,command) {
+function sendcommand(addressee,command,callback) {
 	var checksum = 0;
 	for (var i = 0; i<command.length; i++) {
 		checksum += command.charCodeAt(i);
 	}
 	checksum = checksum.toString(16).slice(-2);
-	addressee.write(command+checksum+'\r\n');
+	console.log('sendcommand',command+checksum)
+	addressee.write(command+checksum+'\r\n',function(){
+		if (callback) {
+			callback();
+		}
+	});
 }
 
-exports.manualCommand = function(command) {
+exports.manualCommand = function(command,callback) {
 	if (actual) {
-		sendcommand(actual,command);
+		if (callback) {
+			sendcommand(actual,command,function(){
+				console.log('manual command callback')
+				callback();
+			});
+		} else {
+			sendcommand(actual,command);
+		}
 	} else {
 		//not initialized
 	}
 };
 
-exports.getCurrent = function() {
-	eventEmitter.emit('data',alarmdata);
+exports.getCurrent = function(callback) {
+	callback(alarmdata);
 };
