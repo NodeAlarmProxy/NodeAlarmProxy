@@ -23,7 +23,7 @@ alarm.on('data', function(data) {
 	console.log('npmtest data:',data);
 });
 
-alarm.on('zoneupdate', function(data) {
+alarm.on('zone', function(data) {
 	console.log('npmtest zoneupdate:',data);
 	if (watchevents.indexOf(data.code) != -1) {
 		var smartURL = "https://graph.api.smartthings.com/api/smartapps/installations/"+config.app_id+"/panel/"+data.code+"/zone"+data.zone+"?access_token="+config.access_token;
@@ -36,7 +36,7 @@ alarm.on('zoneupdate', function(data) {
 	}
 });
 
-alarm.on('partitionupdate', function(data) {
+alarm.on('partition', function(data) {
 	console.log('npmtest partitionupdate:',data);
 	if (watchevents.indexOf(data.code) != -1) {	
 		var smartURL = "https://graph.api.smartthings.com/api/smartapps/installations/"+config.app_id+"/panel/"+data.code+"/partition"+data.partition+"?access_token="+config.access_token;
@@ -47,12 +47,4 @@ alarm.on('partitionupdate', function(data) {
 			console.log("Got error: " + e.message);
 		});
 	}
-});
-
-alarm.on('partitionuserupdate', function(data) {
-	console.log('npmtest partitionuserupdate:',data);
-});
-
-alarm.on('systemupdate', function(data) {
-	console.log('npmtest systemupdate:',data);
 });
