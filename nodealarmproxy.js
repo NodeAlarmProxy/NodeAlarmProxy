@@ -221,7 +221,7 @@ function sendcommand(addressee,command) {
 	for (var i = 0; i<command.length; i++) {
 		checksum += command.charCodeAt(i);
 	}
-	checksum = checksum.toString(16).slice(-2);
+	checksum = checksum.toString(16).slice(-2).toUpperCase();
 	addressee.write(command+checksum+'\r\n');
 }
 
