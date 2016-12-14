@@ -11,8 +11,15 @@ var alarmdata = {
 };
 
 var actual, server, config;
+var consoleWrapper = new Object();
 
 exports.initConfig = function(initconfig) {
+	consoleWrapper.log = function() {
+		// default is to long unless specifically disabled
+		if(initconfig.logging !== false) {
+			console.log.apply(this, arguments);
+		}
+	}
 
 	config = initconfig;
 	if (!config.actualport) {
@@ -23,7 +30,7 @@ exports.initConfig = function(initconfig) {
 	}
 
 	actual = net.connect({port: config.actualport, host:config.actualhost}, function() {
-		console.log('actual connected');
+		consoleWrapper.log('actual connected');
 	});
 
 	if (config.proxyenable) {
@@ -37,36 +44,36 @@ exports.initConfig = function(initconfig) {
 			config.serverpassword = config.actualpassword;
 		}
 		var server = net.createServer(function(c) { //'connection' listener
-			console.log('server connected');
+			consoleWrapper.log('server connected');
 			connections.push(c);
 
 			c.on('error',function(e){
-				console.log('error',e);
+				consoleWrapper.log('error',e);
 				connections = [];
 			});
 
 			c.on('end', function() {
 				var index = connections.indexOf(c);
 				if ( ~index ) connections.splice(index,1);
-				console.log('server disconnected:',connections);
+				consoleWrapper.log('server disconnected:',connections);
 			});
 		  
 			c.on('data', function(data) {
-				console.log('data',data.toString());
+				consoleWrapper.log('data',data.toString());
 				var dataslice = data.toString().replace(/[\n\r]/g, ',').split(',');
 
 				for (var i = 0; i<dataslice.length; i++) {
 					var rec = elink.applicationcommands[dataslice[i].substring(0,3)];
 					if (rec) {
 						if (rec.bytes=='' || rec.bytes==0){
-							console.log(rec.pre,rec.post);
+							consoleWrapper.log(rec.pre,rec.post);
 						} else {
-							console.log(rec.pre,dataslice[i].substring(3,dataslice[i].length-2),rec.post);
+							consoleWrapper.log(rec.pre,dataslice[i].substring(3,dataslice[i].length-2),rec.post);
 						}
 						if (rec.action == 'checkpassword') {
 							checkpassword(c,dataslice[i]);
 						}
-						console.log('rec.action',rec.action);
+						consoleWrapper.log('rec.action',rec.action);
 						if (rec.action == 'forward') {
 							sendforward(dataslice[i].substring(0,dataslice[i].length-2));
 						}
@@ -79,29 +86,29 @@ exports.initConfig = function(initconfig) {
 		  c.pipe(c);
 		});
 		server.listen(config.serverport,config.serverhost, function() { //'listening' listener
-			console.log('server bound');
+			consoleWrapper.log('server bound');
 		});
 
 		function checkpassword(c,data) {
 			if (data.substring(3,data.length-2) == config.serverpassword) {
-				console.log('Correct Password! :)');
+				consoleWrapper.log('Correct Password! :)');
 				sendcommand(c,'5051');
 			} else {
-				console.log('Incorrect Password :(');
+				consoleWrapper.log('Incorrect Password :(');
 				sendcommand(c,'5050');
 				c.end();
 			}
 		}
 
 		function sendforward(data) {
-			console.log('sendforward:',data);
+			consoleWrapper.log('sendforward:',data);
 			sendcommand(actual,data);
 		}
 
 		function broadcastresponse(response) {
 			if (connections.length > 0) {
 				for (var i = 0; i<connections.length; i++) {
-					console.log('response',response);
+					consoleWrapper.log('response',response);
 					sendcommand(connections[i],response);
 				}
 			}
@@ -110,17 +117,17 @@ exports.initConfig = function(initconfig) {
 
 	function loginresponse(data) {
 		if (data.substring(3,4) == '0') {
-			console.log('Incorrect Password :(');
+			consoleWrapper.log('Incorrect Password :(');
 		}
 		if (data.substring(3,4) == '1') {
-			console.log('successfully logged in!  getting current data...');
+			consoleWrapper.log('successfully logged in!  getting current data...');
 			sendcommand(actual,'001');
 		}
 		if (data.substring(3,4) == '2') {
-			console.log('Request for Password Timed Out :(');
+			consoleWrapper.log('Request for Password Timed Out :(');
 		}
 		if (data.substring(3,4) == '3') {
-			console.log('login requested... sending response...');
+			consoleWrapper.log('login requested... sending response...');
 			sendcommand(actual,'005'+config.password);
 		}
 	}
@@ -165,9 +172,9 @@ exports.initConfig = function(initconfig) {
 				var tpi = elink.tpicommands[datapacket.substring(0,3)];
 				if (tpi) {
 					if (tpi.bytes=='' || tpi.bytes==0){
-						console.log(tpi.pre,tpi.post);
+						consoleWrapper.log(tpi.pre,tpi.post);
 					} else {
-						console.log(tpi.pre,datapacket.substring(3,datapacket.length-2),tpi.post);
+						consoleWrapper.log(tpi.pre,datapacket.substring(3,datapacket.length-2),tpi.post);
 						if (tpi.action == 'updatezone') {
 							updatezone(tpi,datapacket);
 						}
@@ -193,7 +200,7 @@ exports.initConfig = function(initconfig) {
 	  //actual.end();
 	});
 	actual.on('end', function() {
-	  console.log('actual disconnected');
+	  consoleWrapper.log('actual disconnected');
 	});
 
 	return eventEmitter;
@@ -205,7 +212,7 @@ function sendcommand(addressee,command,callback) {
 		checksum += command.charCodeAt(i);
 	}
 	checksum = checksum.toString(16).slice(-2).toUpperCase();
-	console.log('sendcommand',command+checksum)
+	consoleWrapper.log('sendcommand',command+checksum)
 	addressee.write(command+checksum+'\r\n',function(){
 		if (callback) {
 			callback();
@@ -217,7 +224,7 @@ exports.manualCommand = function(command,callback) {
 	if (actual) {
 		if (callback) {
 			sendcommand(actual,command,function(){
-				console.log('manual command callback')
+				consoleWrapper.log('manual command callback')
 				callback();
 			});
 		} else {
