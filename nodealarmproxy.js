@@ -12,6 +12,7 @@ var alarmdata = {
 
 var actual, server, config;
 var consoleWrapper = new Object();
+var commandCallback = undefined;
 
 exports.initConfig = function (initconfig) {
 	consoleWrapper.log = function () {
@@ -216,6 +217,16 @@ exports.initConfig = function (initconfig) {
 						else if (tpi.action === 'loginresponse') {
 							loginresponse(datapacket);
 						}
+                                                else if (tpi.action === 'command-completed') {
+                                                  if (commandCallback) {
+                                                     commandCallback();
+                                                  }
+                                                }
+                                                else if (tpi.action === 'command-error') {
+                                                  if (commandCallback) {
+                                                     commandCallback(datapacket.substring(3, datapacket.length - 2));
+                                                  }
+						}
 					}
 					if (config.proxyenable) {
 						broadcastresponse(datapacket.substring(0, datapacket.length - 2));
@@ -242,16 +253,14 @@ function sendcommand(addressee, command) {
 	addressee.write(command + checksum + '\r\n');
 }
 
-exports.manualCommand = function (command) {
+exports.manualCommand = function (command, callback) {
 	if (actual) {
 		if (callback) {
-			sendcommand(actual, command, function () {
-				consoleWrapper.log('manual command callback')
-				callback();
-			});
+                        commandCallback = callback;
 		} else {
-			sendcommand(actual, command);
+                        commandCallback = undefined;
 		}
+		sendcommand(actual, command);
 	} else {
 		//not initialized
 	}

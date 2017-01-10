@@ -176,7 +176,7 @@ exports.tpicommands = {
     'bytes':3,
     'post':'Acknowledged',
     'send':'',
-    'action':''
+    'action':'command-completed'
   },
   '501' : {
     'name':'Command Error',
@@ -184,7 +184,7 @@ exports.tpicommands = {
     'bytes':0,
     'post':'',
     'send':'',
-    'action':''
+    'action': 'command-error'
   },
   '502' : {
     'name':'System Error',
@@ -192,7 +192,7 @@ exports.tpicommands = {
     'bytes':3,
     'post':'has been detected.',
     'send':'',
-    'action':''
+    'action':'command-error'
   },
   '505' : {
     'name':'Login Interaction',
