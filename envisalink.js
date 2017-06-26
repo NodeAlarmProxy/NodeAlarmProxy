@@ -333,7 +333,6 @@ exports.tpicommands = {
   '621' : {
     'name':'Fire Key Alarm',
     'pre':'Fire key alarm has been activated',
-    'bytes':0,
     'post':'',
     'send':'alarm',
     'action':'updatesystem'
@@ -341,7 +340,6 @@ exports.tpicommands = {
   '622' : {
     'name':'Fire Key Restore',
     'pre':'Fire key alarm has been restored',
-    'bytes':0,
     'post':'',
     'send':'restore',
     'action':'updatesystem'
@@ -349,7 +347,6 @@ exports.tpicommands = {
   '623' : {
     'name':'Auxiliary Key Alarm',
     'pre':'Auxiliary key alarm has been activated',
-    'bytes':0,
     'post':'',
     'send':'alarm',
     'action':'updatesystem'
@@ -357,7 +354,6 @@ exports.tpicommands = {
   '624' : {
     'name':'Auxiliary Key Restore',
     'pre':'Auxiliary key alarm has been restored',
-    'bytes':0,
     'post':'',
     'send':'restore',
     'action':'updatesystem'
@@ -365,7 +361,6 @@ exports.tpicommands = {
   '625' : {
     'name':'Panic Key Alarm',
     'pre':'Panic key alarm has been activated',
-    'bytes':0,
     'post':'',
     'send':'alarm',
     'action':'updatesystem'
@@ -373,7 +368,6 @@ exports.tpicommands = {
   '626' : {
     'name':'Panic Key Restore',
     'pre':'Panic key alarm has been restored',
-    'bytes':0,
     'post':'',
     'send':'restore',
     'action':'updatesystem'
@@ -381,7 +375,6 @@ exports.tpicommands = {
   '631' : {
     'name':'2-Wire Smoke/Aux Alarm',
     'pre':'2-Wire Smoke/Aux alarm has been activated',
-    'bytes':0,
     'post':'',
     'send':'alarm',
     'action':'updatesystem'
@@ -389,7 +382,6 @@ exports.tpicommands = {
   '632' : {
     'name':'2-Wire Smoke/Aux Restore',
     'pre':'2-Wire Smoke/Aux alarm has been restore',
-    'bytes':0,
     'post':'',
     'send':'alarm',
     'action':'updatesystem'
@@ -653,7 +645,6 @@ exports.tpicommands = {
   '829' : {
     'name':'General System Tamper',
     'pre':'A tamper has occured with a module',
-    'bytes':0,
     'post':'',
     'send':'tamper',
     'action':'updatesystem'
@@ -661,7 +652,6 @@ exports.tpicommands = {
   '830' : {
     'name':'General System Tamper Restore',
     'pre':'General System Tamper Restored',
-    'bytes':0,
     'post':'',
     'send':'tamperrestore',
     'action':'updatesystem'
