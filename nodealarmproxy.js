@@ -199,9 +199,9 @@ exports.initConfig = function (initconfig) {
 				var tpi = elink.tpicommands[datapacket.substring(0, 3)];
 				if (tpi) {
 					if (tpi.bytes === '' || tpi.bytes === 0) {
-						consoleWrapper.log(rec.pre, rec.post);
+						consoleWrapper.log(tpi.pre, tpi.post);
 					} else {
-						consoleWrapper.log(rec.pre, dataslice[i].substring(3, dataslice[i].length - 2), rec.post);
+						consoleWrapper.log(tpi.pre, datapacket.substring(3, datapacket.length - 2), tpi.post);
 						if (tpi.action === 'updatezone') {
 							updatezone(tpi, datapacket);
 						}
