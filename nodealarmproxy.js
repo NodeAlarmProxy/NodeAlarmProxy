@@ -139,9 +139,15 @@ exports.initConfig = function (initconfig) {
 		var initialUpdate = alarmdata.zone[zone] === undefined;
 		if (zone <= config.zone) {
 			alarmdata.zone[zone] = { 'send': tpi.send, 'name': tpi.name, 'code': data };
-			if (config.atomicEvents && !initialUpdate) {
+			if (config.atomicEvents && !(initialUpdate && config.suppressInitialUpdate))  {
 				//eventEmitter.emit('zoneupdate', [zone, alarmdata.zone[zone]]);
-				eventEmitter.emit('zoneupdate', { zone: parseInt(data.substring(3, 6)), code: data.substring(0, 3) });
+				var zoneId = parseInt(data.substring(3, 6));
+				var evtData = { zone: zoneId, code: data.substring(0, 3), evtName: tpi.send };
+				if( config.zoneInfo && config.zoneInfo[zoneId] && config.zoneInfo[zoneId].label)
+					evtData.zoneLabel = config.zoneInfo[zoneId].label;
+				else
+					evtData.zoneLabel = "Zone-" + zoneId;
+				eventEmitter.emit('zoneupdate', evtData);
 			} else {
 				eventEmitter.emit('data', alarmdata);
 			}
@@ -152,12 +158,12 @@ exports.initConfig = function (initconfig) {
 		var initialUpdate = alarmdata.partition[partition] === undefined;
 		if (partition <= config.partition) {
 			alarmdata.partition[partition] = { 'send': tpi.send, 'name': tpi.name, 'code': data };
-			if (config.atomicEvents && !initialUpdate) {
+			if (config.atomicEvents && !(initialUpdate && config.suppressInitialUpdate)) {
 				//eventEmitter.emit('partitionupdate', [partition, alarmdata.partition[partition]]);
 				if (data.substring(0, 3) == "652") {
-					eventEmitter.emit('partitionupdate', { partition: parseInt(data.substring(3, 4)), code: data.substring(0, 3), mode: data.substring(4, 5) });
+					eventEmitter.emit('partitionupdate', { partition: parseInt(data.substring(3, 4)), code: data.substring(0, 3), mode: data.substring(4, 5), evtName: tpi.send });
 				} else {
-					eventEmitter.emit('partitionupdate', { partition: parseInt(data.substring(3, 4)), code: data.substring(0, 3) });
+					eventEmitter.emit('partitionupdate', { partition: parseInt(data.substring(3, 4)), code: data.substring(0, 3), evtName: tpi.send });
 				}
 			} else {
 				eventEmitter.emit('data', alarmdata);
