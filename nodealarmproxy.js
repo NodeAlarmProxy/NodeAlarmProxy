@@ -142,7 +142,12 @@ exports.initConfig = function (initconfig) {
 			if (config.atomicEvents && !(initialUpdate && config.suppressInitialUpdate))  {
 				//eventEmitter.emit('zoneupdate', [zone, alarmdata.zone[zone]]);
 				var zoneId = parseInt(data.substring(3, 6));
-				var evtData = { zone: zoneId, code: data.substring(0, 3), evtName: tpi.send };
+				var evtData = {
+					evtType: "zoneUpdate",
+					zone: zoneId, 
+					code: data.substring(0, 3), 
+					status: tpi.send 
+				};
 				if( config.zoneInfo && config.zoneInfo[zoneId] && config.zoneInfo[zoneId].label)
 					evtData.zoneLabel = config.zoneInfo[zoneId].label;
 				else
@@ -160,11 +165,35 @@ exports.initConfig = function (initconfig) {
 			alarmdata.partition[partition] = { 'send': tpi.send, 'name': tpi.name, 'code': data };
 			if (config.atomicEvents && !(initialUpdate && config.suppressInitialUpdate)) {
 				//eventEmitter.emit('partitionupdate', [partition, alarmdata.partition[partition]]);
-				if (data.substring(0, 3) == "652") {
-					eventEmitter.emit('partitionupdate', { partition: parseInt(data.substring(3, 4)), code: data.substring(0, 3), mode: data.substring(4, 5), evtName: tpi.send });
-				} else {
-					eventEmitter.emit('partitionupdate', { partition: parseInt(data.substring(3, 4)), code: data.substring(0, 3), evtName: tpi.send });
+				var cmd = data.substring(0,3);
+				var partId = parseInt(data.substring(3,4));
+				var evtData = { 
+					evtType: "partitionUpdate",
+					partition: parseInt(data.substring(3, 4)), 
+					code: data.substring(0, 3), 
+					status: tpi.send 
+				};
+				if (cmd == "652") {		// Partition Armed
+					var armModeInt = parseInt(data.substring(4,5));
+					evtData.armMode = (['away','stay','zero-entry-away','zero-entry-stay'])[armModeInt];
+				} else if( cmd == "700" || cmd == "750") {		// 700=User closing, 750=User opening
+					if( cmd == "700")
+						evtData.armType = "userClosing";
+					else if( cmd == "750")
+						evtData.armType = "userOpening";
+					evtData.userId = parseInt(data.substring(4,8));
+					if( config.userInfo && config.userInfo[evtData.userId] && config.userInfo[evtData.userId].label)
+						evtData.userLabel = config.userInfo[evtData.userId].label;
+					// Also call updatepartitionuser() to update alarmdata and emit the partitionuserupdate event as well for those who uses it (hope this does not break anything)
+					updatepartitionuser(tpi,data);
+				} else if( cmd == "701") {	// Special closing
+					evtData.armType = "specialClosing";
+				} else if( cmd == "751") {	// Special opening
+					evtData.armType = "specialOpening";
 				}
+
+				//eventEmitter.emit('partitionupdate', { partition: parseInt(data.substring(3, 4)), code: data.substring(0, 3), mode: data.substring(4, 5), evtName: tpi.send });
+				eventEmitter.emit('partitionupdate', evtData);
 			} else {
 				eventEmitter.emit('data', alarmdata);
 			}
@@ -187,8 +216,14 @@ exports.initConfig = function (initconfig) {
 		var partition = parseInt(data.substring(3, 4));
 		var initialUpdate = alarmdata.system === undefined;
 		if (partition <= config.partition) {
-			alarmdata.system = { 'send': tpi.send, 'name': tpi.name, 'code': data };
-			if (config.atomicEvents && !initialUpdate) {
+			alarmdata.system = { 
+				evtType: "systemUpdate",
+				'send': tpi.send, 
+				'status': tpi.send,		// not sure what "send" is for, evtType seems more appropriate(?)
+				'name': tpi.name, 
+				'code': data.substring(0,3)
+			};
+			if (config.atomicEvents && !(initialUpdate && config.suppressInitialUpdate)) {
 				eventEmitter.emit('systemupdate', alarmdata.system);
 			} else {
 				eventEmitter.emit('data', alarmdata);
@@ -218,7 +253,8 @@ exports.initConfig = function (initconfig) {
 							updatepartitionuser(tpi, datapacket);
 						}
 						else if (tpi.action === 'updatesystem') {
-							updatepartitionuser(tpi, datapacket);
+							//updatepartitionuser(tpi, datapacket);		// surely this could not have been right?
+							updatesystem(tpi, datapacket);
 						}
 						else if (tpi.action === 'loginresponse') {
 							loginresponse(datapacket);
