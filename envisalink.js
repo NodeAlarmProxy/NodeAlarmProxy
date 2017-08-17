@@ -335,7 +335,7 @@ exports.tpicommands = {
     'pre':'Fire key alarm has been activated',
     'bytes':0,
     'post':'',
-    'send':'alarm',
+    'send':'firekeyalarm',
     'action':'updatesystem'
   },
   '622' : {
@@ -343,7 +343,7 @@ exports.tpicommands = {
     'pre':'Fire key alarm has been restored',
     'bytes':0,
     'post':'',
-    'send':'restore',
+    'send':'firekeyrestore',
     'action':'updatesystem'
   },
   '623' : {
@@ -351,7 +351,7 @@ exports.tpicommands = {
     'pre':'Auxiliary key alarm has been activated',
     'bytes':0,
     'post':'',
-    'send':'alarm',
+    'send':'auxkeyalarm',
     'action':'updatesystem'
   },
   '624' : {
@@ -359,7 +359,7 @@ exports.tpicommands = {
     'pre':'Auxiliary key alarm has been restored',
     'bytes':0,
     'post':'',
-    'send':'restore',
+    'send':'auxkeyrestore',
     'action':'updatesystem'
   },
   '625' : {
@@ -367,7 +367,7 @@ exports.tpicommands = {
     'pre':'Panic key alarm has been activated',
     'bytes':0,
     'post':'',
-    'send':'alarm',
+    'send':'panickeyalarm',
     'action':'updatesystem'
   },
   '626' : {
@@ -375,7 +375,7 @@ exports.tpicommands = {
     'pre':'Panic key alarm has been restored',
     'bytes':0,
     'post':'',
-    'send':'restore',
+    'send':'panickeyrestore',
     'action':'updatesystem'
   },
   '631' : {
@@ -383,7 +383,7 @@ exports.tpicommands = {
     'pre':'2-Wire Smoke/Aux alarm has been activated',
     'bytes':0,
     'post':'',
-    'send':'alarm',
+    'send':'twowiresmokealarm',
     'action':'updatesystem'
   },
   '632' : {
@@ -391,7 +391,7 @@ exports.tpicommands = {
     'pre':'2-Wire Smoke/Aux alarm has been restore',
     'bytes':0,
     'post':'',
-    'send':'alarm',
+    'send':'twowiresmokerestore',
     'action':'updatesystem'
   },
   '650' : {
@@ -479,24 +479,24 @@ exports.tpicommands = {
     'pre':'PGM Output of Partition',
     'bytes':1,
     'post':'is in Progress',
-    'send':'',
-    'action':''
+    'send':'pgmoutputinprogress',
+    'action':'updatepartition'
   },
   '663' : {
     'name':'Chime Enabled',
     'pre':'Door Chime on Partition',
     'bytes':1,
     'post':'is Enabled',
-    'send':'',
-    'action':''
+    'send':'chimeenabled',
+    'action':'updatepartition'
   },
   '664' : {
     'name':'Chime Disabled',
     'pre':'Door Chime on Partition',
     'bytes':1,
     'post':'is Disabled',
-    'send':'',
-    'action':''
+    'send':'chimedisabled',
+    'action':'updatepartition'
   },
   '670' : {
     'name':'Invalid Access Code',
@@ -543,23 +543,23 @@ exports.tpicommands = {
     'pre':'System is in Installer Mode',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'installersmode',
+    'action':'updatesystem'
   },
   '700' : {
     'name':'User Closing',
     'pre':'Partition has been armed by user:',
     'bytes':5,
     'post':'',
-    'send':'armed',
-    'action':'updatepartitionuser'
+    'send':'userclosing',
+    'action':'updatepartition'
   },
   '701' : {
     'name':'Special Closing',
     'pre':'Partition',
     'bytes':1,
     'post':'has been armed by Quick Arm, Auto Arm, Keyswitch, DLS or Wireless Key',
-    'send':'armed',
+    'send':'specialclosing',
     'action':'updatepartition'
   },
   '702' : {
@@ -576,7 +576,7 @@ exports.tpicommands = {
     'bytes':5,
     'post':'',
     'send':'useropen',
-    'action':'updatepartitionuser'
+    'action':'updatepartition'
   },
   '751' : {
     'name':'Special Opening',
@@ -591,64 +591,64 @@ exports.tpicommands = {
     'pre':'The panel has a low battery',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'batterytrouble',
+    'action':'updatesystem'
   },
   '801' : {
     'name':'Panel Battery Trouble Restore',
     'pre':'The panel battery has been restored',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'batterytroublerestore',
+    'action':'updatesystem'
   },
   '802' : {
     'name':'Panel AC Trouble',
     'pre':'AC Power to the Panel has been removed',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'actrouble',
+    'action':'updatesystem'
   },
   '803' : {
     'name':'Panel AC Restored',
     'pre':'AC Power to the panel has been restored',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'actroublerestore',
+    'action':'updatesystem'
   },
   '806' : {
     'name':'System Bell Trouble',
     'pre':'An open circuit has been detected across the bell terminals',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'systembelltrouble',
+    'action':'updatesystem'
   },
   '807' : {
     'name':'System Bell Trouble Restored',
     'pre':'Bell Trouble has been Restored',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'systembelltroublerestore',
+    'action':'updatesystem'
   },
   '814' : {
     'name':'FTC Trouble',
     'pre':'Panel has failed to communicate to the monitoring station',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'communicationtrouble',
+    'action':'updatesystem'
   },
   '816' : {
     'name':'Buffer Near Full',
     'pre':'Event Buffer is 75% full',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'buffernearfull',
+    'action':'updatesystem'
   },
   '829' : {
     'name':'General System Tamper',
@@ -671,32 +671,32 @@ exports.tpicommands = {
     'pre':'Trouble LED of Partition',
     'bytes':1,
     'post':'is ON',
-    'send':'',
-    'action':''
+    'send':'troubleledon',
+    'action':'updatesystem'
   },
   '841' : {
     'name':'Trouble LED Off',
     'pre':'Trouble LED of Partition',
     'bytes':1,
     'post':'is OFF',
-    'send':'',
-    'action':''
+    'send':'troubleledoff',
+    'action':'updatesystem'
   },
   '842' : {
     'name':'Fire Trouble Alarm',
     'pre':'Fire Trouble Alarm',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'firetroublealarm',
+    'action':'updatesystem'
   },
   '843' : {
     'name':'Fire Trouble Alarm Restored',
     'pre':'Fire Trouble Alarm Restored',
     'bytes':0,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'firetroublealarmrestore',
+    'action':'updatesystem'
   },
   '849' : {
     'name':'Verbose Trouble Status',
