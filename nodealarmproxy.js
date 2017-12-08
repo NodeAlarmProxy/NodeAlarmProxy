@@ -212,7 +212,7 @@ exports.initConfig = function (initconfig) {
 							updatepartitionuser(tpi, datapacket);
 						}
 						else if (tpi.action === 'updatesystem') {
-							updatepartitionuser(tpi, datapacket);
+							updatesystem(tpi, datapacket);
 						}
 						else if (tpi.action === 'loginresponse') {
 							loginresponse(datapacket);
