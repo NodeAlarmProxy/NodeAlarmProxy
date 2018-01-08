@@ -283,7 +283,7 @@ exports.tpicommands = {
     'action':'updatezone'
   },
   '605' : {
-    'name':'Zone Alarm',
+    'name':'Zone Fault',
     'pre':'Zone',
     'bytes':3,
     'post':'has a fault condition',
@@ -291,7 +291,7 @@ exports.tpicommands = {
     'action':'updatezone'
   },
   '606' : {
-    'name':'Zone Alarm Restore',
+    'name':'Zone Fault Restore',
     'pre':'Zone',
     'bytes':3,
     'post':'fault condition has been restored',
@@ -307,7 +307,7 @@ exports.tpicommands = {
     'action':'updatezone'
   },
   '610' : {
-    'name':'Zone Alarm Restore',
+    'name':'Zone Restore',
     'pre':'Zone',
     'bytes':4,
     'post':'is restored',
@@ -463,7 +463,7 @@ exports.tpicommands = {
     'pre':'Keypad at Partition',
     'bytes':1,
     'post':'is locked out due to too many failed user code attempts',
-    'send':'keypadlock',
+    'send':'keypadlockout',
     'action':'updatepartition'
   },
   '659' : {
@@ -471,7 +471,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'FAILED to Arm',
-    'send':'failedarm',
+    'send':'failedtoarm',
     'action':'updatepartition'
   },
   '660' : {
@@ -511,15 +511,15 @@ exports.tpicommands = {
     'pre':'A Function Selected on Partition',
     'bytes':1,
     'post':'is not Available',
-    'send':'',
-    'action':''
+    'send':'functionnotavailable',
+    'action':'updatepartition'
   },
   '672' : {
     'name':'Failure to Arm',
     'pre':'An Attempt to Arm Partition',
     'bytes':1,
     'post':'Failed',
-    'send':'failedarm',
+    'send':'failedtoarm',
     'action':'updatepartition'
   },
   '673' : {
@@ -535,7 +535,7 @@ exports.tpicommands = {
     'pre':'System is auto-arming and in arm warning delay on Partition',
     'bytes':1,
     'post':'',
-    'send':'arming',
+    'send':'autoarming',
     'action':'updatepartition'
   },
   '680' : {
@@ -567,7 +567,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'is armed with one or more zones bypassed',
-    'send':'armedbypass',
+    'send':'partialclosing',
     'action':'updatepartition'
   },
   '750' : {
@@ -575,7 +575,7 @@ exports.tpicommands = {
     'pre':'Partition Opened by User:',
     'bytes':5,
     'post':'',
-    'send':'useropen',
+    'send':'useropening',
     'action':'updatepartition'
   },
   '751' : {
@@ -583,7 +583,7 @@ exports.tpicommands = {
     'pre':'Partition',
     'bytes':1,
     'post':'has been disarmed by Keyswitch, DLS or Wireless Key',
-    'send':'disarmed',
+    'send':'specialopening',
     'action':'updatepartition'
   },
   '800' : {
@@ -703,8 +703,8 @@ exports.tpicommands = {
     'pre':'Verbose Trouble Status Code:',
     'bytes':2,
     'post':'',
-    'send':'',
-    'action':''
+    'send':'verbosetroublestatus',
+    'action':'updatesystem'
   },
   '900' : {
     'name':'Code Required',
