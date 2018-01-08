@@ -169,7 +169,7 @@ exports.initConfig = function (initconfig) {
 				var partId = parseInt(data.substring(3,4));
 				var evtData = { 
 					evtType: "partitionUpdate",
-					partition: parseInt(data.substring(3, 4)), 
+					partition: partId, 
 					code: data.substring(0, 3), 
 					status: tpi.send 
 				};
@@ -213,22 +213,45 @@ exports.initConfig = function (initconfig) {
 		}
 	}
 	function updatesystem(tpi, data) {
-		var partition = parseInt(data.substring(3, 4));
-		var initialUpdate = alarmdata.system === undefined;
-		if (partition <= config.partition) {
-			alarmdata.system = { 
-				evtType: "systemUpdate",
-				'send': tpi.send, 
-				'status': tpi.send,		// not sure what "send" is for, evtType seems more appropriate(?)
-				'name': tpi.name, 
-				'code': data.substring(0,3)
-			};
-			if (config.atomicEvents && !(initialUpdate && config.suppressInitialUpdate)) {
-				eventEmitter.emit('systemupdate', alarmdata.system);
-			} else {
-				eventEmitter.emit('data', alarmdata);
-			}
+		var code = data.substring(0,3);
+		var systemData = {
+			"evtType": "systemUpdate",
+			"code": code,
+			"status": tpi.send
+		};
+		if( code == 840 || code == 841) {
+			var partId = parseInt(data.substring(3,4));
+			systemData.partition = partId;
+			if( partId > config.partition)
+				return;	// don't emit this event since it's about a partition we're not interested in
+		} else if( code == 849) {
+			var trouble_bitfield = parseInt( "0x" + data.substring(3,5));
+			var trouble = [];
+			if( trouble_bitfield & (1<<0))
+				trouble.push("SERVICE_IS_REQUIRED");
+			if( trouble_bitfield & (1<<1))
+				trouble.push("AC_POWER_LOST");
+			if( trouble_bitfield & (1<<2))
+				trouble.push("TELEPHONE_LINE_FAULT");
+			if( trouble_bitfield & (1<<3))
+				trouble.push("FAILURE_TO_COMMUNICATE");
+			if( trouble_bitfield & (1<<4))
+				trouble.push("SENSOR_OR_ZONE_FAULT");
+			if( trouble_bitfield & (1<<5))
+				trouble.push("SENSOR_OR_ZONE_TAMPER");
+			if( trouble_bitfield & (1<<6))
+				trouble.push("SENSOR_OR_ZONE_LOW_BATTERY");
+			if( trouble_bitfield & (1<<7))
+				trouble.push("LOSS_OF_TIME");
+			systemData.troubleStatus = trouble;
 		}
+
+		if (config.atomicEvents) {
+			eventEmitter.emit('systemupdate', systemData);
+		} else {
+			eventEmitter.emit('data', systemData);
+		}
+
 	}
 
 	actual.on('data', function (data) {
@@ -259,15 +282,15 @@ exports.initConfig = function (initconfig) {
 						else if (tpi.action === 'loginresponse') {
 							loginresponse(datapacket);
 						}
-                                                else if (tpi.action === 'command-completed') {
-                                                  if (commandCallback) {
-                                                     commandCallback();
-                                                  }
-                                                }
-                                                else if (tpi.action === 'command-error') {
-                                                  if (commandCallback) {
-                                                     commandCallback(datapacket.substring(3, datapacket.length - 2));
-                                                  }
+						else if (tpi.action === 'command-completed') {
+							if (commandCallback) {
+								commandCallback();
+							}
+						}
+						else if (tpi.action === 'command-error') {
+							if (commandCallback) {
+								commandCallback(datapacket.substring(3, datapacket.length - 2));
+							}
 						}
 					}
 					if (config.proxyenable) {
