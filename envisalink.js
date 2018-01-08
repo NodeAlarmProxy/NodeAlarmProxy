@@ -263,7 +263,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':4,
     'post':'has been restored',
-    'send':'restore',
+    'send':'alarmrestore',
     'action':'updatezone'
   },
   '603' : {
@@ -279,7 +279,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':4,
     'post':'tamper condition has been restored',
-    'send':'restore',
+    'send':'tamperrestore',
     'action':'updatezone'
   },
   '605' : {
@@ -287,7 +287,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':3,
     'post':'has a fault condition',
-    'send':'alarm',
+    'send':'fault',
     'action':'updatezone'
   },
   '606' : {
@@ -295,7 +295,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':3,
     'post':'fault condition has been restored',
-    'send':'restore',
+    'send':'faultrestore',
     'action':'updatezone'
   },
   '609' : {
@@ -311,7 +311,7 @@ exports.tpicommands = {
     'pre':'Zone',
     'bytes':4,
     'post':'is restored',
-    'send':'restore',
+    'send':'openrestore',
     'action':'updatezone'
   },
   '615' : {
