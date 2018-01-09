@@ -224,25 +224,33 @@ exports.initConfig = function (initconfig) {
 			systemData.partition = partId;
 			if( partId > config.partition)
 				return;	// don't emit this event since it's about a partition we're not interested in
-		} else if( code == 849) {
+		} else if( code == 849) {		// Verbose Trouble Status
 			var trouble_bitfield = parseInt( "0x" + data.substring(3,5));
-			var trouble = [];
+			var trouble = {};
+			trouble.service_is_required = false;
+			trouble.ac_power_lost = false;
+			trouble.telephone_line_fault = false;
+			trouble.failure_to_communicate = false;
+			trouble.sensor_or_zone_fault = false;
+			trouble.sensor_or_zone_tamper = false;
+			trouble.sensor_or_zone_low_battery = false;
+			trouble.loss_of_time = false;
 			if( trouble_bitfield & (1<<0))
-				trouble.push("SERVICE_IS_REQUIRED");
+				trouble.service_is_required = true;
 			if( trouble_bitfield & (1<<1))
-				trouble.push("AC_POWER_LOST");
+				trouble.ac_power_lost = true;
 			if( trouble_bitfield & (1<<2))
-				trouble.push("TELEPHONE_LINE_FAULT");
+				trouble.telephone_line_fault = true;
 			if( trouble_bitfield & (1<<3))
-				trouble.push("FAILURE_TO_COMMUNICATE");
+				trouble.failure_to_communicate = true;
 			if( trouble_bitfield & (1<<4))
-				trouble.push("SENSOR_OR_ZONE_FAULT");
+				trouble.sensor_or_zone_fault = true;
 			if( trouble_bitfield & (1<<5))
-				trouble.push("SENSOR_OR_ZONE_TAMPER");
+				trouble.sensor_or_zone_tamper = true;
 			if( trouble_bitfield & (1<<6))
-				trouble.push("SENSOR_OR_ZONE_LOW_BATTERY");
+				trouble.sensor_or_zone_low_battery = true;
 			if( trouble_bitfield & (1<<7))
-				trouble.push("LOSS_OF_TIME");
+				trouble.loss_of_time = true;
 			systemData.troubleStatus = trouble;
 		}
 
