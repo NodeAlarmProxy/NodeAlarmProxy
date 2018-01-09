@@ -672,7 +672,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is ON',
     'send':'troubleledon',
-    'action':'updatesystem'
+    'action':'updatepartition'
   },
   '841' : {
     'name':'Trouble LED Off',
@@ -680,7 +680,7 @@ exports.tpicommands = {
     'bytes':1,
     'post':'is OFF',
     'send':'troubleledoff',
-    'action':'updatesystem'
+    'action':'updatepartition'
   },
   '842' : {
     'name':'Fire Trouble Alarm',
